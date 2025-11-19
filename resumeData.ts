@@ -1,0 +1,146 @@
+export const resumeData = {
+  "profile": {
+    "name": "Deep Shah",
+    "role": "System Architect",
+    "email": "deep@shahdeep.ca",
+    "summary": "Experienced System Architect with expertise in managing Microsoft Azure, Intune, Active Directory, and Windows Server environments. I'm focused on enhancing security, operational efficiency, and infrastructure management with a strong focus on Azure and cybersecurity."
+  },
+  "socialLinks": [
+    {
+      "name": "Email",
+      "url": "mailto:deep@shahdeep.ca",
+      "icon": "Mail",
+      "username": "deep@shahdeep.ca"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://www.linkedin.com/in/deepvshah03",
+      "icon": "Linkedin",
+      "username": "deepvshah03"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com/deepshah0308",
+      "icon": "Github",
+      "username": "deepshah"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Microsoft Azure",
+      "proficiency": 95,
+      "technologies": ["Sentinel", "Azure AD", "B2C", "VMs", "Storage", "DNS Zones", "Virtual WAN", "PiM", "SSO"]
+    },
+    {
+      "category": "Cybersecurity",
+      "proficiency": 85,
+      "technologies": ["SIEM", "Incident Management", "Microsoft Defender", "Network Security", "Threat Management"]
+    },
+    {
+      "category": "Microsoft Intune",
+      "proficiency": 90,
+      "technologies": ["Windows Autopilot", "Android Zero-touch", "Apple Zero-touch", "Enterprise Mobility"]
+    },
+    {
+      "category": "Scripting & Auto",
+      "proficiency": 80,
+      "technologies": ["PowerShell", "Bash", "Python"]
+    },
+    {
+      "category": "Firewall Admin",
+      "proficiency": 75,
+      "technologies": ["FortiGate", "IP Subnetting", "VLAN", "ACL", "WAN", "VPN"]
+    },
+    {
+      "category": "Virtualization",
+      "proficiency": 70,
+      "technologies": ["VMware ESXi"]
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Azure Lead / Network Analyst",
+      "company": "Canadian Bankers Association",
+      "period": "Oct 2024 – Present",
+      "url": "https://cba.ca",
+      "description": "Lead the management, design, and maintenance of Azure infrastructure, enhancing scalability and security. Collaborate on cybersecurity strategies, support on-premises infrastructure, and architect Intune solutions for enterprise endpoint management.",
+      "achievements": [
+        "Optimized Azure infrastructure to improve scalability and enhance security protocols.",
+        "Implemented Intune solutions, streamlining endpoint management and improving compliance.",
+        "Contributed to on-premises and cloud network security by coordinating cybersecurity initiatives."
+      ]
+    },
+    {
+      "title": "Sr. System Administrator",
+      "company": "Wakefield Canada Inc.",
+      "period": "Aug 2022 – Oct 2024",
+      "url": "https://wakefieldcanada.ca",
+      "description": "Streamlined device enrollment, reduced setup times, and improved security compliance across 500+ devices. Led disaster recovery sessions, deployed and secured systems, and managed SIEM for enhanced threat detection.",
+      "achievements": [
+        "Reduced setup time by 30% through streamlined enrollment of devices.",
+        "Decreased unauthorized access incidents by 15% through account management.",
+        "Led disaster recovery sessions improving recovery objectives by 20%."
+      ]
+    },
+    {
+      "title": "IT System Analyst",
+      "company": "Opentext",
+      "period": "Nov 2021 – Aug 2022",
+      "url": "https://opentext.com",
+      "description": "Managed macOS and Windows systems, reduced incidents through JAMF PRO and SCCM, and improved system uptime by 15%.",
+      "achievements": [
+        "Achieved 95% first contact resolution rate.",
+        "Reduced incident reports by 20% through effective macOS management."
+      ]
+    },
+    {
+      "title": "IT Helpdesk Technician",
+      "company": "St. Catharines Public Library",
+      "period": "Jul 2020 – Oct 2021",
+      "url": "https://myscpl.ca",
+      "description": "Provided IT support to staff and patrons, resolving 100+ issues weekly and ensuring smooth library operations.",
+      "achievements": [
+        "Resolved 100+ issues weekly with a 98% satisfaction rate.",
+        "Reduced equipment shortages by 15% through inventory management."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "Azure Virtual Desktop (AVD) Infrastructure Implementation",
+      "company": "Canadian Bankers Association",
+      "description": "Designed and deployed a scalable AVD infrastructure. Integrated Hydra AVD Manager for administration and FSLogix profile containers for a seamless, consistent user environment. Delivered a secure, cost-optimized, and highly available remote work solution.",
+      "technologies": ["Azure Virtual Desktop", "Hydra AVD Manager", "FSLogix", "Azure AD", "Azure Storage", "Azure Monitor"]
+    },
+    {
+      "title": "Azure AD B2C Integration - Infrastructure Technical Lead",
+      "company": "Castrol - Wakefield Canada Inc",
+      "description": "Spearheaded the integration of Azure AD B2C. Conducted thorough research, implemented a successful Proof of Concept (PoC), and presented the showcase to stakeholders. Driving the transition to QA and production.",
+      "technologies": ["Azure AD B2C", "Entra ID"]
+    },
+    {
+      "title": "Mulesoft Integration Platform Implementation",
+      "company": "Castrol - Wakefield Canada Inc",
+      "description": "Managed the infrastructure transition from Boomi to Mulesoft. Key achievements include IPsec VPN setup linking on-premises infrastructure to Mulesoft, Single Sign-On (SSO) configuration using Entra ID, and custom domain implementation.",
+      "technologies": ["Mulesoft", "IPsec VPN", "Entra ID", "SSL Certificates"]
+    },
+    {
+      "title": "Intune - Windows Autopilot",
+      "company": "Castrol - Wakefield Canada Inc",
+      "description": "Implemented Windows Autopilot for efficient, streamlined setup and pre-configuration for new devices, simplifying the entire Windows device lifecycle and reducing deployment effort.",
+      "technologies": ["Microsoft Intune", "Windows Autopilot", "Azure AD"]
+    },
+    {
+      "title": "Intune Zero touch deployment for Android And IOS",
+      "company": "Castrol - Wakefield Canada Inc",
+      "description": "Combines Samsung Knox and Apple Business Manager for seamless deployment from purchase to repurposing. Ensures devices arrive with enforced management settings.",
+      "technologies": ["Microsoft Intune", "Samsung Knox", "Apple Business Manager", "Android Zero-touch", "iOS Zero-touch"]
+    }
+  ],
+  "certifications": [
+    { "name": "Administering Windows Server Hybrid Core Infrastructure (AZ-800)", "issuer": "Microsoft" },
+    { "name": "Microsoft Certified: Azure Administrator Associate (AZ-104)", "issuer": "Microsoft" },
+    { "name": "Certified in Cybersecurity (ISC2)", "issuer": "(ISC)²" },
+    { "name": "Technical Support Fundamentals", "issuer": "Google" }
+  ]
+};
