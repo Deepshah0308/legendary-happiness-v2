@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Download } from 'lucide-react';
 import { PROFILE, SOCIAL_LINKS } from '../constants';
 
 const Hero: React.FC = () => {
@@ -36,6 +36,15 @@ const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
+             <a
+               href="/resume.pdf"
+               download="Deep_Shah_Resume.pdf"
+               className="flex items-center gap-2 px-6 py-3 rounded-lg bg-azure-600 text-white border border-azure-600 hover:bg-azure-500 hover:border-azure-500 transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:shadow-[0_0_25px_rgba(14,165,233,0.5)] group"
+             >
+               <Download className="w-5 h-5 group-hover:scale-110 transition-transform" />
+               <span className="font-bold">Download Resume</span>
+             </a>
+
              {SOCIAL_LINKS.map((link) => (
                <a
                 key={link.name}
