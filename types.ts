@@ -39,4 +39,5 @@ export interface Profile {
   role: string;
   email: string;
   summary: string;
+  tagline: string;
 }

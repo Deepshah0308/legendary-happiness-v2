@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <span className="inline-block py-1 px-3 rounded-full bg-white/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-azure-600 dark:text-azure-400 text-sm font-mono mb-6 shadow-sm">
-            Infrastructure & Security Specialist
+            {PROFILE.tagline}
           </span>
           
           <h1 className="text-5xl md:text-7xl font-bold text-slate-900 dark:text-white tracking-tight mb-6">
