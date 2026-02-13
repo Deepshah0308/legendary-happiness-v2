@@ -1,10 +1,10 @@
 export const resumeData = {
   "profile": {
     "name": "Deep Shah",
-    "role": "System Architect",
+    "role": "Infrastructure Platform & Security Engineer",
     "email": "deep@shahdeep.ca",
-    "tagline": "Infrastructure & Security Specialist",
-    "summary": "Experienced System Architect with expertise in managing Microsoft Azure, Intune, Active Directory, and Windows Server environments. I'm focused on enhancing security, operational efficiency, and infrastructure management with a strong focus on Azure and cybersecurity."
+    "tagline": "Infrastructure Platform & Security Engineer",
+    "summary": "Infrastructure Platform & Security Engineer with deep expertise in Microsoft Azure, Intune, Active Directory, and Windows Server environments. Passionate about building resilient, secure, and scalable infrastructure platforms — from cloud architecture and endpoint management to cybersecurity operations and platform engineering."
   },
   "socialLinks": [
     {
@@ -60,9 +60,23 @@ export const resumeData = {
   ],
   "experiences": [
     {
+      "title": "Infrastructure Platform & Security Engineer",
+      "company": "Canadian Bankers Association",
+      "period": "Jan 2026 – Present",
+      "url": "https://cba.ca",
+      "description": "Architect and maintain secure, highly available Azure infrastructure platforms for a national financial association. Drive platform engineering initiatives across cloud, on-premises, and hybrid environments while leading security operations, endpoint management, and infrastructure automation to support enterprise-grade compliance and operational resilience.",
+      "achievements": [
+        "Architected and maintained Azure cloud infrastructure, improving platform availability and reducing operational overhead through automation and IaC best practices.",
+        "Led security operations including SIEM monitoring, incident response, and vulnerability management to safeguard critical financial systems.",
+        "Engineered enterprise endpoint management solutions via Microsoft Intune and Autopilot, ensuring zero-touch provisioning and policy compliance across all devices.",
+        "Designed and deployed Azure Virtual Desktop (AVD) infrastructure with FSLogix profile containers, enabling secure and seamless remote workforce access.",
+        "Strengthened hybrid network security posture through firewall policy management, VPN configurations, and identity governance with Entra ID and Privileged Identity Management (PIM)."
+      ]
+    },
+    {
       "title": "Azure Lead / Network Analyst",
       "company": "Canadian Bankers Association",
-      "period": "Oct 2024 – Present",
+      "period": "Oct 2024 – Dec 2025",
       "url": "https://cba.ca",
       "description": "Lead the management, design, and maintenance of Azure infrastructure, enhancing scalability and security. Collaborate on cybersecurity strategies, support on-premises infrastructure, and architect Intune solutions for enterprise endpoint management.",
       "achievements": [
