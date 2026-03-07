@@ -5,10 +5,10 @@ import { Briefcase, ExternalLink } from 'lucide-react';
 
 const Experience: React.FC = () => {
   return (
-    <section id="experience" className="py-20 bg-slate-100/50 dark:bg-slate-900/30 transition-colors duration-300">
+    <section id="experience" className="py-12 md:py-20 bg-slate-100/50 dark:bg-slate-900/30 transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Professional Journey</h2>
+        <div className="text-center mb-10 md:mb-16">
+          <h2 className="font-serif text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">Professional Journey</h2>
           <div className="w-12 h-1 bg-luxury-gold mx-auto" />
         </div>
 

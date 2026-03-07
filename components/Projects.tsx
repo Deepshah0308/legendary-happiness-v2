@@ -5,9 +5,9 @@ import { FolderGit2 } from 'lucide-react';
 
 const Projects: React.FC = () => {
   return (
-    <section id="projects" className="py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
+    <section id="projects" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-white mb-4">Featured Projects</h2>
           <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
         </div>

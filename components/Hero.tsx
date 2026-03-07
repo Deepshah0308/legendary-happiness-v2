@@ -5,7 +5,7 @@ import { PROFILE, SOCIAL_LINKS } from '../constants';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <section className="relative min-h-[100svh] flex items-center justify-center py-20 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Background Gradients */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-luxury-gold/10 dark:bg-luxury-gold/5 rounded-full blur-3xl -z-10" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-slate-400/10 dark:bg-slate-600/10 rounded-full blur-3xl -z-10" />
@@ -23,19 +23,19 @@ const Hero: React.FC = () => {
             {PROFILE.tagline}
           </span>
 
-          <h1 className="font-serif text-5xl md:text-8xl font-bold text-slate-900 dark:text-white tracking-tight mb-6">
-            Hi, I'm <span className="text-transparent bg-clip-text bg-gradient-to-r from-luxury-gold to-yellow-600 dark:from-luxury-gold dark:to-yellow-500">{PROFILE.name}</span>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-slate-900 dark:text-white tracking-tight mb-4 md:mb-6">
+            Hi, I'm <span className="block mt-2 md:inline md:mt-0 text-transparent bg-clip-text bg-gradient-to-r from-luxury-gold to-yellow-600 dark:from-luxury-gold dark:to-yellow-500">{PROFILE.name}</span>
           </h1>
 
-          <h2 className="text-2xl md:text-4xl font-light text-slate-600 dark:text-slate-400 mb-8 font-sans tracking-wide">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-light text-slate-600 dark:text-slate-400 mb-6 md:mb-8 font-sans tracking-wide">
             {PROFILE.role}
           </h2>
 
-          <p className="max-w-2xl mx-auto text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-10">
+          <p className="max-w-2xl mx-auto text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed mb-10">
             {PROFILE.summary}
           </p>
 
-          <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center mb-12">
             <a
               href="/resume.pdf"
               download="Deep_Shah_Resume.pdf"

@@ -38,9 +38,9 @@ const Articles: React.FC = () => {
   if (!loading && articles.length === 0) return null;
 
   return (
-    <section id="articles" className="py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
+    <section id="articles" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Latest Articles</h2>
           <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
           <p className="mt-4 text-slate-600 dark:text-slate-400 font-sans">

@@ -9,20 +9,20 @@ const Skills: React.FC = () => {
   const isDark = theme === 'dark';
 
   return (
-    <section id="skills" className="py-20 bg-luxury-light dark:bg-luxury-dark relative transition-colors duration-300">
+    <section id="skills" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark relative transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Technical Expertise</h2>
           <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Chart Section */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="h-[400px] w-full bg-white/50 dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 backdrop-blur-sm shadow-sm dark:shadow-none"
+            className="h-[300px] md:h-[400px] w-full bg-white/50 dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800 p-2 md:p-4 backdrop-blur-sm shadow-sm dark:shadow-none"
           >
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SKILLS_DATA}>
