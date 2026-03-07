@@ -1,39 +1,52 @@
 import React from 'react';
 import { CERTIFICATIONS } from '../constants';
 import { motion } from 'framer-motion';
-import { Award, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 const Certifications: React.FC = () => {
   return (
     <section id="certifications" className="py-20 bg-slate-100/50 dark:bg-slate-900/30 transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          <div className="w-full md:w-1/3 text-center md:text-left">
-             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Certifications</h2>
-             <p className="text-slate-600 dark:text-slate-400 mb-6">
-               Continuous learning and validation of skills through industry-recognized certifications.
-             </p>
-             <Award className="w-32 h-32 text-azure-200 dark:text-azure-900/50 mx-auto md:mx-0" />
-          </div>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Certifications</h2>
+          <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full mb-6"></div>
+          <p className="font-sans text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            Continuous learning and validation of skills through industry-recognized certifications.
+          </p>
+        </div>
 
-          <div className="w-full md:w-2/3 grid gap-4">
-            {CERTIFICATIONS.map((cert, idx) => (
-              <motion.div
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {CERTIFICATIONS.map((cert, idx) => {
+            const CardWrapper = cert.url ? motion.a : motion.div;
+            return (
+              <CardWrapper
+                href={cert.url}
+                target={cert.url ? "_blank" : undefined}
+                rel={cert.url ? "noreferrer" : undefined}
                 key={idx}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-azure-400 dark:hover:border-azure-500/40 transition-colors shadow-sm dark:shadow-none"
+                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className="flex flex-col items-center text-center gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-8 rounded-xl border border-slate-200/50 dark:border-slate-800/50 hover:border-luxury-gold/50 dark:hover:border-luxury-gold/50 transition-all duration-300 shadow-sm hover:shadow-xl dark:shadow-[0_0_15px_rgba(212,175,55,0.05)] dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] relative overflow-hidden group"
               >
-                <CheckCircle2 className="w-6 h-6 text-green-500 flex-shrink-0" />
-                <div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white">{cert.name}</h3>
-                  <p className="text-sm text-slate-500">{cert.issuer}</p>
+                {cert.logo ? (
+                  <div className="w-24 h-24 flex-shrink-0 bg-slate-50 dark:bg-white rounded-xl p-4 flex items-center justify-center border border-slate-100 dark:border-slate-200 shadow-inner mb-2">
+                    <img src={cert.logo} alt={`${cert.issuer} logo`} className="max-w-full max-h-full object-contain drop-shadow-sm group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                ) : (
+                  <div className="w-24 h-24 flex-shrink-0 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-inner mb-2">
+                    <CheckCircle2 className="w-10 h-10 text-luxury-gold" />
+                  </div>
+                )}
+
+                <div className="relative z-10 flex flex-col flex-grow justify-between">
+                  <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-luxury-gold transition-colors duration-300">{cert.name}</h3>
+                  <p className="text-xs font-sans tracking-widest text-luxury-gold uppercase font-semibold">{cert.issuer}</p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </CardWrapper>
+            )
+          })}
         </div>
       </div>
     </section>

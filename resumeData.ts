@@ -153,9 +153,10 @@ export const resumeData = {
     }
   ],
   "certifications": [
-    { "name": "Administering Windows Server Hybrid Core Infrastructure (AZ-800)", "issuer": "Microsoft" },
-    { "name": "Microsoft Certified: Azure Administrator Associate (AZ-104)", "issuer": "Microsoft" },
-    { "name": "Certified in Cybersecurity (ISC2)", "issuer": "(ISC)²" },
-    { "name": "Technical Support Fundamentals", "issuer": "Google" }
+    { "name": "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)", "issuer": "Microsoft", "logo": "/assets/az-305-logo.png", "url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-solutions-architect/" },
+    { "name": "Administering Windows Server Hybrid Core Infrastructure (AZ-800)", "issuer": "Microsoft", "logo": "/assets/az-800-logo.png", "url": "https://learn.microsoft.com/en-us/credentials/certifications/windows-server-hybrid-administrator/" },
+    { "name": "Microsoft Certified: Azure Administrator Associate (AZ-104)", "issuer": "Microsoft", "logo": "/assets/az-104-logo.png", "url": "https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/" },
+    { "name": "Certified in Cybersecurity (ISC2)", "issuer": "(ISC)²", "logo": "/assets/cc-logo.png", "url": "https://www.isc2.org/Certifications/CC" },
+    { "name": "Technical Support Fundamentals", "issuer": "Google", "logo": "/assets/google-tsf-logo.png", "url": "https://www.coursera.org/learn/technical-support-fundamentals" }
   ]
 };
