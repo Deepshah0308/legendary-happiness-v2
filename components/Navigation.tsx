@@ -77,7 +77,7 @@ const Navigation: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex-shrink-0 flex items-center">
+            <div className="flex-shrink flex items-center min-w-0 mr-2">
               <a
                 href="#"
                 onClick={(e) => handleLinkClick(e, '#')}
@@ -86,7 +86,7 @@ const Navigation: React.FC = () => {
                 <img
                   src="/assets/logo-dvs.png"
                   alt="DVS Logo"
-                  className="h-10 w-auto transition-transform duration-500 group-hover:scale-105 dark:invert"
+                  className="h-8 sm:h-10 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105 dark:invert"
                 />
               </a>
             </div>
@@ -121,7 +121,7 @@ const Navigation: React.FC = () => {
               </div>
             </div>
 
-            <div className="-mr-2 flex md:hidden items-center gap-4">
+            <div className="flex md:hidden items-center gap-2 flex-shrink-0">
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
