@@ -2,7 +2,7 @@ import React from 'react';
 import { PROFILE, SOCIAL_LINKS } from '../constants';
 import { Linkedin, Github, Mail } from 'lucide-react';
 
-const iconMap: Record<string, React.FC<{ size?: number }>> = {
+const iconMap: Record<string, any> = {
   LinkedIn: Linkedin, GitHub: Github, Email: Mail,
 };
 

@@ -9,7 +9,6 @@ const PULSE_COUNT = 4;     // nodes that glow Apple Blue
 /* colours — tuned for dark (black) background */
 const BLUE  = '#0071e3';
 const GRAY  = '#48484a';   // dim gray on black
-const BG    = '#000000';
 
 interface Node {
   x: number;

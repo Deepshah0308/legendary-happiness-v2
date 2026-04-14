@@ -3,7 +3,7 @@ import { ArrowDown, Download, Linkedin, Github, Mail } from 'lucide-react';
 import { PROFILE, SOCIAL_LINKS } from '../constants';
 import NetworkBackground from './NetworkBackground';
 
-const iconMap: Record<string, React.FC<{ size?: number }>> = {
+const iconMap: Record<string, any> = {
   LinkedIn: Linkedin, GitHub: Github, Email: Mail,
 };
 
