@@ -1,61 +1,77 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { PROJECTS } from '../constants';
-import { motion } from 'framer-motion';
-import { FolderGit2 } from 'lucide-react';
 
 const Projects: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll<HTMLElement>('.project-card').forEach((el, i) => {
+            setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 80);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="projects" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-white mb-4">Featured Projects</h2>
-          <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
+    <section id="projects" ref={sectionRef} style={{ background: '#f5f5f7', padding: '100px 0', color: '#1d1d1f' }}>
+      <div className="container-wide">
+        <div style={{ marginBottom: '60px', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#0071e3', marginBottom: '12px' }}>Work</p>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 600, lineHeight: 1.10, letterSpacing: '-0.3px', color: '#1d1d1f', marginBottom: '16px' }}>Featured Projects</h2>
+          <p style={{ fontSize: '17px', lineHeight: 1.47, letterSpacing: '-0.374px', color: 'rgba(0,0,0,0.56)', maxWidth: '540px', margin: '0 auto' }}>
+            Enterprise infrastructure initiatives delivered at scale.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
           {PROJECTS.map((project, idx) => (
-            <motion.div
+            <div
               key={idx}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:border-luxury-gold/50 dark:hover:border-luxury-gold/50 transition-all duration-300 group flex flex-col"
+              className="project-card"
+              style={{
+                background: '#fff',
+                borderRadius: '8px',
+                padding: '28px',
+                boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px',
+                opacity: 0,
+                transform: 'translateY(16px)',
+                transition: 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s',
+                transitionDelay: `${idx * 0.06}s`,
+                display: 'flex', flexDirection: 'column',
+              }}
             >
-              <div className="p-6 flex-1">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 bg-luxury-gold/10 rounded-lg text-luxury-gold group-hover:bg-luxury-gold group-hover:text-white transition-colors duration-300">
-                    <FolderGit2 className="w-6 h-6" />
-                  </div>
-                </div>
+              {/* Index */}
+              <span style={{ fontSize: '12px', fontWeight: 700, color: '#0071e3', letterSpacing: '0.04em', marginBottom: '16px', display: 'block' }}>
+                {String(idx + 1).padStart(2, '0')}
+              </span>
 
-                <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-2 group-hover:text-luxury-gold transition-colors duration-300">
-                  {project.title}
-                </h3>
-                {project.company && (
-                  <p className="text-xs text-luxury-gold/80 font-sans mb-3 uppercase tracking-widest">
-                    {project.company}
-                  </p>
-                )}
+              {project.company && (
+                <span style={{ fontSize: '12px', fontWeight: 400, letterSpacing: '-0.12px', color: 'rgba(0,0,0,0.48)', marginBottom: '6px', display: 'block' }}>
+                  {project.company}
+                </span>
+              )}
 
-                <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6 font-sans">
-                  {project.description}
-                </p>
+              <h3 style={{ fontSize: '21px', fontWeight: 600, color: '#1d1d1f', marginBottom: '12px', lineHeight: 1.19, letterSpacing: '-0.3px', flex: 1 }}>
+                {project.title}
+              </h3>
+
+              <p style={{ fontSize: '14px', lineHeight: 1.43, letterSpacing: '-0.224px', color: 'rgba(0,0,0,0.56)', marginBottom: '20px' }}>
+                {project.description}
+              </p>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: 'auto' }}>
+                {project.technologies.map(t => (
+                  <span key={t} className="tag tag-light" style={{ fontSize: '12px' }}>{t}</span>
+                ))}
               </div>
-
-              <div className="p-6 pt-0 mt-auto">
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-xs font-sans text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
 import { BookOpen, Heart, MessageCircle, ExternalLink, Calendar } from 'lucide-react';
 
 interface DevToArticle {
@@ -8,7 +7,6 @@ interface DevToArticle {
   description: string;
   url: string;
   cover_image: string | null;
-  social_image: string | null;
   public_reactions_count: number;
   comments_count: number;
   published_at: string;
@@ -17,118 +15,125 @@ interface DevToArticle {
 
 const Articles: React.FC = () => {
   const [articles, setArticles] = useState<DevToArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]   = useState(true);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    fetch("https://dev.to/api/articles?username=shahdeep")
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          // Take first 4 articles as per request
-          setArticles(data.slice(0, 4));
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to fetch articles", err);
-        setLoading(false);
-      });
+    fetch('https://dev.to/api/articles?username=shahdeep')
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data)) setArticles(data.slice(0, 4)); setLoading(false); })
+      .catch(() => setLoading(false));
   }, []);
 
-  if (!loading && articles.length === 0) return null;
+  useEffect(() => {
+    if (!articles.length) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll<HTMLElement>('.article-card').forEach((el, i) => {
+            setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 100);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [articles]);
+
+  if (!loading && !articles.length) return null;
 
   return (
-    <section id="articles" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Latest Articles</h2>
-          <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
-          <p className="mt-4 text-slate-600 dark:text-slate-400 font-sans">
-            Writing about cloud architecture, automation, and cybersecurity.
+    <section id="articles" ref={sectionRef} style={{ background: '#f5f5f7', padding: '100px 0', color: '#1d1d1f' }}>
+      <div className="container-wide">
+        <div style={{ marginBottom: '60px', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#0071e3', marginBottom: '12px' }}>Writing</p>
+          <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', fontWeight: 600, lineHeight: 1.10, letterSpacing: '-0.3px', color: '#1d1d1f', marginBottom: '16px' }}>Latest Articles</h2>
+          <p style={{ fontSize: '17px', lineHeight: 1.47, letterSpacing: '-0.374px', color: 'rgba(0,0,0,0.56)', maxWidth: '540px', margin: '0 auto' }}>
+            Practical writing on cloud architecture, automation, and cybersecurity.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {articles.map((article, idx) => (
-            <motion.a
-              key={article.id}
-              href={article.url}
-              target="_blank"
-              rel="noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="flex flex-col bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:border-luxury-gold/50 dark:hover:border-luxury-gold/50 transition-all duration-300 group"
-            >
-              {/* Image Section */}
-              <div className="h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
-                {article.cover_image ? (
-                  <img
-                    src={article.cover_image}
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-slate-400">
-                    <BookOpen className="w-12 h-12 opacity-50" />
-                  </div>
-                )}
-                <div className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-mono text-slate-600 dark:text-slate-300 flex items-center gap-2 shadow-sm">
-                  <Calendar className="w-3 h-3" />
-                  {new Date(article.published_at).toLocaleDateString()}
+        {/* Skeleton */}
+        {loading && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '16px' }}>
+            {[1,2,3,4].map(i => (
+              <div key={i} style={{ background: '#fff', borderRadius: '8px', height: '280px', boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px', overflow: 'hidden' }}>
+                <div style={{ height: '150px', background: '#e8e8ed' }} />
+                <div style={{ padding: '18px' }}>
+                  <div style={{ height: '10px', background: '#e8e8ed', borderRadius: '4px', marginBottom: '8px', width: '60%' }} />
+                  <div style={{ height: '14px', background: '#e8e8ed', borderRadius: '4px', width: '90%' }} />
                 </div>
               </div>
+            ))}
+          </div>
+        )}
 
-              {/* Content Section */}
-              <div className="p-6 flex flex-col flex-1">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {article.tag_list.map(tag => (
-                    <span key={tag} className="text-xs font-sans text-luxury-gold bg-luxury-gold/10 px-3 py-1 rounded-full border border-luxury-gold/20">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-
-                <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white mb-3 group-hover:text-luxury-gold transition-colors duration-300 line-clamp-2">
-                  {article.title}
-                </h3>
-
-                <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3 flex-1 font-sans">
-                  {article.description}
-                </p>
-
-                <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-500 pt-4 border-t border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <Heart className="w-4 h-4" />
-                      {article.public_reactions_count}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="w-4 h-4" />
-                      {article.comments_count}
-                    </span>
-                  </div>
-                  <span className="flex items-center gap-1 text-luxury-gold font-sans font-medium">
-                    Read More <ExternalLink className="w-3 h-3" />
+        {!loading && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))', gap: '16px' }}>
+            {articles.map((article, idx) => (
+              <a key={article.id} href={article.url} target="_blank" rel="noreferrer"
+                className="article-card"
+                style={{
+                  display: 'flex', flexDirection: 'column',
+                  background: '#fff', borderRadius: '8px', overflow: 'hidden',
+                  boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px',
+                  opacity: 0, transform: 'translateY(16px)',
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  transitionDelay: `${idx * 0.08}s`,
+                  textDecoration: 'none', color: 'inherit',
+                }}
+              >
+                {/* Cover */}
+                <div style={{ height: '160px', background: '#f5f5f7', overflow: 'hidden', position: 'relative' }}>
+                  {article.cover_image
+                    ? <img src={article.cover_image} alt={article.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    : <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}><BookOpen size={36} style={{ color: '#c7c7cc' }} /></div>
+                  }
+                  <span style={{ position: 'absolute', bottom: '10px', left: '10px', background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(8px)', borderRadius: '980px', padding: '3px 10px', fontSize: '12px', fontWeight: 400, color: 'rgba(0,0,0,0.56)', display: 'flex', alignItems: 'center', gap: '4px', letterSpacing: '-0.12px' }}>
+                    <Calendar size={11} />
+                    {new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                 </div>
-              </div>
-            </motion.a>
-          ))}
-        </div>
 
-        <div className="text-center mt-12">
-          <a
-            href="https://dev.to/shahdeep"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-luxury-gold hover:text-luxury-gold transition-all duration-300 shadow-sm dark:shadow-[0_0_15px_rgba(212,175,55,0.05)] hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] font-sans uppercase tracking-widest text-sm"
-          >
-            <BookOpen className="w-4 h-4" />
-            View All Articles
-          </a>
-        </div>
+                {/* Body */}
+                <div style={{ padding: '18px 20px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '10px' }}>
+                    {article.tag_list.slice(0,3).map(tag => (
+                      <span key={tag} style={{ fontSize: '12px', fontWeight: 400, color: '#0066cc', letterSpacing: '-0.12px' }}>#{tag}</span>
+                    ))}
+                  </div>
+
+                  <h3 style={{ fontSize: '17px', fontWeight: 600, color: '#1d1d1f', lineHeight: 1.24, letterSpacing: '-0.374px', marginBottom: '8px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {article.title}
+                  </h3>
+
+                  <p style={{ fontSize: '14px', lineHeight: 1.43, letterSpacing: '-0.224px', color: 'rgba(0,0,0,0.56)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1, marginBottom: '14px' }}>
+                    {article.description}
+                  </p>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid #f2f2f7' }}>
+                    <div style={{ display: 'flex', gap: '12px', color: 'rgba(0,0,0,0.4)', fontSize: '13px', letterSpacing: '-0.12px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}><Heart size={12} /> {article.public_reactions_count}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}><MessageCircle size={12} /> {article.comments_count}</span>
+                    </div>
+                    <span style={{ fontSize: '14px', color: '#0066cc', display: 'flex', alignItems: 'center', gap: '3px', letterSpacing: '-0.224px' }}>
+                      Read <ExternalLink size={12} />
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {!loading && articles.length > 0 && (
+          <div style={{ textAlign: 'center', marginTop: '48px' }}>
+            <a href="https://dev.to/shahdeep" target="_blank" rel="noreferrer" className="pill-link pill-link-light">
+              <BookOpen size={15} /> View All Articles ›
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

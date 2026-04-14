@@ -1,51 +1,80 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { CERTIFICATIONS } from '../constants';
-import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
+import { ExternalLink, Award } from 'lucide-react';
 
 const Certifications: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll<HTMLElement>('.cert-card').forEach((el, i) => {
+            setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 70);
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="certifications" className="py-12 md:py-20 bg-slate-100/50 dark:bg-slate-900/30 transition-colors duration-300">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Certifications</h2>
-          <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full mb-6"></div>
-          <p className="font-sans text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Continuous learning and validation of skills through industry-recognized certifications.
+    <section id="certifications" ref={sectionRef} className="section-dark section">
+      <div className="container-wide">
+        <div style={{ marginBottom: '60px', textAlign: 'center' }}>
+          <p className="eyebrow eyebrow-dark">Credentials</p>
+          <h2 className="section-title" style={{ color: '#fff' }}>Certifications</h2>
+          <p style={{ fontSize: '17px', lineHeight: 1.47, letterSpacing: '-0.374px', color: 'rgba(255,255,255,0.65)', maxWidth: '540px', margin: '0 auto' }}>
+            Industry-recognized credentials validating cloud and security expertise.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
           {CERTIFICATIONS.map((cert, idx) => {
-            const CardWrapper = cert.url ? motion.a : motion.div;
+            const El = cert.url ? 'a' : 'div';
             return (
-              <CardWrapper
-                href={cert.url}
-                target={cert.url ? "_blank" : undefined}
-                rel={cert.url ? "noreferrer" : undefined}
+              <El
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.5 }}
-                className="flex flex-col items-center text-center gap-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-8 rounded-xl border border-slate-200/50 dark:border-slate-800/50 hover:border-luxury-gold/50 dark:hover:border-luxury-gold/50 transition-all duration-300 shadow-sm hover:shadow-xl dark:shadow-[0_0_15px_rgba(212,175,55,0.05)] dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] relative overflow-hidden group"
+                {...(cert.url ? { href: cert.url, target: '_blank', rel: 'noreferrer' } : {})}
+                className="cert-card"
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  textAlign: 'center', padding: '28px 20px',
+                  background: '#1c1c1e',
+                  borderRadius: '12px',
+                  boxShadow: 'rgba(0,0,0,0.5) 3px 5px 30px 0px',
+                  opacity: 0, transform: 'translateY(16px)',
+                  transition: 'opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s',
+                  transitionDelay: `${idx * 0.05}s`,
+                  textDecoration: 'none', cursor: cert.url ? 'pointer' : 'default',
+                  position: 'relative',
+                }}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                  if (cert.url) (e.currentTarget as HTMLElement).style.boxShadow = 'rgba(0,113,227,0.25) 0 0 0 1px, rgba(0,0,0,0.5) 3px 5px 30px 0px';
+                }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'rgba(0,0,0,0.5) 3px 5px 30px 0px';
+                }}
               >
-                {cert.logo ? (
-                  <div className="w-24 h-24 flex-shrink-0 bg-slate-50 dark:bg-white rounded-xl p-4 flex items-center justify-center border border-slate-100 dark:border-slate-200 shadow-inner mb-2">
-                    <img src={cert.logo} alt={`${cert.issuer} logo`} className="max-w-full max-h-full object-contain drop-shadow-sm group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                ) : (
-                  <div className="w-24 h-24 flex-shrink-0 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-inner mb-2">
-                    <CheckCircle2 className="w-10 h-10 text-luxury-gold" />
-                  </div>
-                )}
+                {cert.url && <ExternalLink size={13} style={{ position: 'absolute', top: '14px', right: '14px', color: 'rgba(255,255,255,0.25)' }} />}
 
-                <div className="relative z-10 flex flex-col flex-grow justify-between">
-                  <h3 className="font-serif text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-luxury-gold transition-colors duration-300">{cert.name}</h3>
-                  <p className="text-xs font-sans tracking-widest text-luxury-gold uppercase font-semibold">{cert.issuer}</p>
+                <div style={{ width: '72px', height: '72px', background: '#ffffff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', overflow: 'hidden', padding: '10px', boxShadow: 'rgba(0,0,0,0.15) 0 2px 8px' }}>
+                  {cert.logo
+                    ? <img src={cert.logo} alt={cert.issuer} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                    : <Award size={32} style={{ color: '#0071e3' }} />
+                  }
                 </div>
-              </CardWrapper>
-            )
+
+                <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#2997ff', marginBottom: '8px', display: 'block' }}>
+                  {cert.issuer}
+                </span>
+                <h3 style={{ fontSize: '14px', fontWeight: 400, lineHeight: 1.43, letterSpacing: '-0.224px', color: 'rgba(255,255,255,0.85)' }}>
+                  {cert.name}
+                </h3>
+              </El>
+            );
           })}
         </div>
       </div>

@@ -1,211 +1,164 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, Cloud } from 'lucide-react';
-import { useTheme } from './ThemeContext';
+import { Menu, X } from 'lucide-react';
 
 const Navigation: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [showContactForm, setShowContactForm] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [isOpen, setIsOpen]             = useState(false);
+  const [showContact, setShowContact]   = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    document.body.style.overflow = (isOpen || showContact) ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen, showContact]);
 
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (showContactForm) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [showContactForm]);
-
-  const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Certifications', href: '#certifications' },
-    { name: 'Articles', href: '#articles' },
+  const links = [
+    { label: 'Skills',           href: '#skills' },
+    { label: 'Experience',       href: '#experience' },
+    { label: 'Projects',         href: '#projects' },
+    { label: 'Certifications',   href: '#certifications' },
+    { label: 'Articles',         href: '#articles' },
   ];
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    const targetId = href.replace('#', '');
-
-    // Handle scroll to top for empty hash or just '#'
-    if (!targetId) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-      setIsOpen(false);
-      return;
-    }
-
-    const element = document.getElementById(targetId);
-    if (element) {
-      // 80px offset accounts for header height (64px) + extra padding
-      const headerOffset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-
-      setIsOpen(false);
-    }
+    setIsOpen(false);
+    const id = href.replace('#', '');
+    if (!id) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 48, behavior: 'smooth' });
   };
 
   return (
     <>
-      <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none'
-          : 'bg-transparent'
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex-shrink flex items-center min-w-0 mr-2">
-              <a
-                href="#"
-                onClick={(e) => handleLinkClick(e, '#')}
-                className="flex items-center gap-3 group"
-              >
-                <img
-                  src="/assets/logo-dvs.png"
-                  alt="DVS Logo"
-                  className="h-8 sm:h-10 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105 dark:invert"
-                />
-              </a>
-            </div>
+      {/* ── Sticky glass nav ── */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        height: '48px',
+        background: 'rgba(0,0,0,0.82)',
+        backdropFilter: 'saturate(180%) blur(20px)',
+        WebkitBackdropFilter: 'saturate(180%) blur(20px)',
+        display: 'flex', alignItems: 'center',
+      }}>
+        <div className="container-wide" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
+          {/* Logo */}
+          <a href="#" onClick={e => scrollTo(e, '#')} style={{ display: 'flex', alignItems: 'center', flexShrink: 0, opacity: 0.9 }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '0.9')}
+          >
+            <img
+              src="/assets/logo-dvs.png"
+              alt="DVS Logo"
+              style={{ height: '28px', width: 'auto', filter: 'brightness(0) invert(1)' }}
+              onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+            />
+          </a>
 
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-slate-600 dark:text-slate-300 hover:text-azure-600 dark:hover:text-azure-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                ))}
-
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button>
-
-                <button
-                  onClick={() => setShowContactForm(true)}
-                  className="bg-azure-600 text-white px-4 py-2 rounded-md text-sm font-bold hover:bg-azure-500 transition-all shadow-[0_0_15px_rgba(14,165,233,0.3)]"
-                >
-                  Contact
-                </button>
-              </div>
-            </div>
-
-            <div className="flex md:hidden items-center gap-2 flex-shrink-0">
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none"
-              >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isOpen && (
-          <div className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className="text-slate-600 dark:text-slate-300 hover:text-azure-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  {link.name}
-                </a>
-              ))}
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  setShowContactForm(true);
+          {/* Desktop links */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0' }} className="desktop-nav">
+            {links.map(l => (
+              <a key={l.label} href={l.href} onClick={e => scrollTo(e, l.href)}
+                style={{
+                  padding: '0 14px', height: '48px',
+                  display: 'flex', alignItems: 'center',
+                  fontSize: '12px', fontWeight: 400,
+                  color: 'rgba(255,255,255,0.85)',
+                  letterSpacing: '-0.01em',
+                  transition: 'color 0.15s',
                 }}
-                className="w-full text-left text-azure-600 dark:text-azure-400 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 block px-3 py-2 rounded-md text-base"
+                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
               >
-                Contact Me
-              </button>
-            </div>
+                {l.label}
+              </a>
+            ))}
+            <button
+              onClick={() => setShowContact(true)}
+              style={{
+                marginLeft: '8px',
+                padding: '6px 14px',
+                background: '#0071e3',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: 400,
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#0077ed')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#0071e3')}
+            >
+              Contact
+            </button>
           </div>
-        )}
+
+          {/* Mobile */}
+          <button onClick={() => setIsOpen(!isOpen)} className="mobile-menu-btn"
+            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', color: '#fff', padding: '4px' }}>
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
 
-      {/* Contact Modal */}
-      {showContactForm && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-4 sm:px-6">
-          <div
-            className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"
-            onClick={() => setShowContactForm(false)}
-          />
-          <div className="relative w-full max-w-3xl bg-white dark:bg-slate-950 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[85vh] animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Cloud className="w-5 h-5 text-azure-500" />
-                Get in Touch
-              </h3>
-              <button
-                onClick={() => setShowContactForm(false)}
-                className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
-              >
-                <X className="w-5 h-5" />
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 99,
+          background: 'rgba(0,0,0,0.92)',
+          backdropFilter: 'blur(20px)',
+          display: 'flex', flexDirection: 'column',
+          paddingTop: '64px', paddingLeft: '24px',
+        }}>
+          {links.map(l => (
+            <a key={l.label} href={l.href} onClick={e => scrollTo(e, l.href)}
+              style={{ fontSize: '24px', fontWeight: 600, color: '#fff', padding: '14px 0', borderBottom: '1px solid rgba(255,255,255,0.08)', letterSpacing: '-0.3px' }}
+            >
+              {l.label}
+            </a>
+          ))}
+          <button onClick={() => { setIsOpen(false); setShowContact(true); }}
+            style={{ marginTop: '24px', alignSelf: 'flex-start', padding: '12px 24px', background: '#0071e3', color: '#fff', fontSize: '17px', fontWeight: 400, border: 'none', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Contact
+          </button>
+        </div>
+      )}
+
+      {/* Contact modal */}
+      {showContact && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(12px)' }}
+            onClick={() => setShowContact(false)} />
+          <div style={{
+            position: 'relative', width: '100%', maxWidth: '700px',
+            background: '#1c1c1e', borderRadius: '12px',
+            boxShadow: 'rgba(0,0,0,0.5) 0 20px 60px',
+            overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '80vh',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+              <span style={{ fontSize: '17px', fontWeight: 600, color: '#fff' }}>Get in Touch</span>
+              <button onClick={() => setShowContact(false)}
+                style={{ background: 'rgba(255,255,255,0.12)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <X size={16} />
               </button>
             </div>
-
-            {/* Modal Body - iframe container */}
-            <div className="flex-1 overflow-y-auto bg-white w-full">
+            <div style={{ flex: 1, overflow: 'hidden' }}>
               <iframe
                 src="https://docs.google.com/forms/d/e/1FAIpQLSe8Fg1ZnO8XkA7oHaJLIXDXSalRuK1Icrw2RkLxkTnDsdWe4Q/viewform?embedded=true"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                marginHeight={0}
-                marginWidth={0}
-                className="w-full h-full min-h-[600px]"
+                width="100%" height="100%"
+                style={{ border: 'none', display: 'block', minHeight: '500px', filter: 'invert(1) hue-rotate(180deg)' }}
                 title="Contact Form"
-              >
-                Loading…
-              </iframe>
+              />
             </div>
           </div>
         </div>
       )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .desktop-nav  { display: none !important; }
+          .mobile-menu-btn { display: flex !important; }
+        }
+      `}</style>
     </>
   );
 };

@@ -1,87 +1,133 @@
-import React from 'react';
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip } from 'recharts';
-import { SKILLS_DATA, getSkillIcon } from '../constants';
-import { motion } from 'framer-motion';
-import { useTheme } from './ThemeContext';
+import React, { useRef, useEffect } from 'react';
+import { SKILLS_DATA } from '../constants';
 
 const Skills: React.FC = () => {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll<HTMLElement>('.skill-card').forEach((el, i) => {
+            setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }, i * 100);
+          });
+          entry.target.querySelectorAll<HTMLElement>('[data-target]').forEach(bar => {
+            bar.style.width = bar.dataset.target || '0%';
+          });
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id="skills" className="py-12 md:py-20 bg-luxury-light dark:bg-luxury-dark relative transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-4">Technical Expertise</h2>
-          <div className="w-20 h-1 bg-luxury-gold mx-auto rounded-full" />
+    <section
+      id="skills"
+      ref={sectionRef}
+      style={{ background: '#f5f5f7', padding: '100px 0', color: '#1d1d1f' }}
+    >
+      <div className="container-wide">
+        {/* Header — all colors explicit */}
+        <div style={{ marginBottom: '60px', textAlign: 'center' }}>
+          <p style={{
+            fontSize: '12px', fontWeight: 600,
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+            color: '#0071e3', marginBottom: '12px',
+          }}>
+            Expertise
+          </p>
+          <h2 style={{
+            fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+            fontWeight: 600, lineHeight: 1.10,
+            letterSpacing: '-0.3px', color: '#1d1d1f',
+            marginBottom: '16px',
+          }}>
+            Technical Skills
+          </h2>
+          <p style={{
+            fontSize: '17px', lineHeight: 1.47,
+            letterSpacing: '-0.374px', color: 'rgba(0,0,0,0.56)',
+            maxWidth: '540px', margin: '0 auto',
+          }}>
+            Specializing in Microsoft Azure, enterprise security, and cross-platform endpoint management.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          {/* Chart Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="h-[300px] md:h-[400px] w-full bg-white/50 dark:bg-slate-900/30 rounded-2xl border border-slate-200 dark:border-slate-800 p-2 md:p-4 backdrop-blur-sm shadow-sm dark:shadow-none"
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={SKILLS_DATA}>
-                <PolarGrid gridType="polygon" stroke={isDark ? "#334155" : "#e2e8f0"} />
-                <PolarAngleAxis dataKey="category" tick={{ fill: isDark ? '#94a3b8' : '#64748b', fontSize: 12 }} />
-                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-                <Radar
-                  name="Proficiency"
-                  dataKey="proficiency"
-                  stroke="#D4AF37"
-                  strokeWidth={2}
-                  fill="#D4AF37"
-                  fillOpacity={0.3}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: isDark ? '#0f172a' : '#ffffff',
-                    borderColor: isDark ? '#1e293b' : '#e2e8f0',
-                    color: isDark ? '#f1f5f9' : '#1e293b'
-                  }}
-                  itemStyle={{ color: '#D4AF37' }}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </motion.div>
+        {/* Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
+          {SKILLS_DATA.map((skill, idx) => (
+            <div
+              key={idx}
+              className="skill-card"
+              style={{
+                background: '#ffffff',
+                borderRadius: '8px',
+                padding: '28px',
+                boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px',
+                opacity: 0,
+                transform: 'translateY(16px)',
+                transition: 'opacity 0.5s ease, transform 0.5s ease',
+                transitionDelay: `${idx * 0.07}s`,
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                <h3 style={{
+                  fontSize: '17px', fontWeight: 600,
+                  color: '#1d1d1f', letterSpacing: '-0.374px',
+                  lineHeight: 1.24,
+                }}>
+                  {skill.category}
+                </h3>
+                <span style={{
+                  fontSize: '13px', fontWeight: 600,
+                  color: '#0071e3', flexShrink: 0, marginLeft: '12px',
+                }}>
+                  {skill.proficiency}%
+                </span>
+              </div>
 
-          {/* Skills List Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {SKILLS_DATA.map((skill, idx) => {
-              const Icon = getSkillIcon(skill.category);
-              return (
-                <motion.div
-                  key={skill.category}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-luxury-gold/50 dark:hover:border-luxury-gold/50 transition-all duration-300 shadow-sm dark:shadow-[0_0_15px_rgba(212,175,55,0.05)] hover:shadow-md dark:hover:shadow-[0_0_20px_rgba(212,175,55,0.15)] group"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-luxury-gold/10 rounded-lg text-luxury-gold group-hover:bg-luxury-gold group-hover:text-white transition-colors duration-300">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-serif font-bold text-lg text-slate-900 dark:text-white group-hover:text-luxury-gold transition-colors duration-300">{skill.category}</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {skill.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+              {/* Progress bar — fully inline, no class color dependency */}
+              <div style={{
+                width: '100%', height: '3px',
+                background: 'rgba(0,0,0,0.08)',
+                borderRadius: '999px', overflow: 'hidden',
+                marginBottom: '20px',
+              }}>
+                <div
+                  data-target={`${skill.proficiency}%`}
+                  style={{
+                    height: '100%',
+                    background: '#0071e3',
+                    borderRadius: '999px',
+                    width: '0%',
+                    transition: 'width 1.2s cubic-bezier(0.4,0,0.2,1)',
+                  }}
+                />
+              </div>
+
+              {/* Tech tags */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {skill.technologies.map(t => (
+                  <span
+                    key={t}
+                    style={{
+                      display: 'inline-block',
+                      padding: '3px 10px',
+                      fontSize: '12px', fontWeight: 500,
+                      letterSpacing: '-0.12px',
+                      borderRadius: '5px',
+                      background: 'rgba(0,0,0,0.05)',
+                      color: 'rgba(0,0,0,0.55)',
+                    }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
